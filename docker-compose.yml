@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ALLOW_ANONYMOUS_LOGIN: "yes"  # Permite login anônimo
+    ports:
+      - "2181:2181"
+    volumes:
+      - zookeeper_data:/bitnami/zookeeper
+
+  kafka:
+    image: bitnami/kafka:latest
+    environment:
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT  # Define o protocolo PLAINTEXT (sem segurança)
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT  # Usa PLAINTEXT para a comunicação interna
+      KAFKA_LISTENER_NAME_INSIDE: INSIDE  # Nome do listener INSIDE
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://localhost:9093  # A porta exposta que o seu código Node.js usará
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181  # Conecta ao Zookeeper
+      KAFKA_LISTENER_PORT: 9093  # Porta de escuta do Kafka
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE  # Comunicação entre brokers usando o listener INSIDE
+    ports:
+      - "9093:9093"
+    volumes:
+      - kafka_data:/bitnami/kafka
+    depends_on:
+      - zookeeper
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo-container
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}  # Variável de ambiente do usuário
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}  # Variável de ambiente da senha
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}  # Banco de dados a ser criado
+    ports:
+      - "27017:27017"  # Porta do MongoDB
+    volumes:
+      - mongo_data:/data/db  # Volume persistente para o banco de dados
+
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    ports:
+      - "6379:6379"  # Porta do Redis
+    volumes:
+      - redis_data:/data  # Volume persistente para os dados do Redis
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+  mongo_data:
+    driver: local
+  redis_data:
+    driver: local
