@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import AuthRouter from './routes/AuthRoute.ts';
 import errorMiddleware from './middlewares/errorMiddleware.ts';  // Importando o middleware de erro
 
-
 // Configuração de ambiente
 dotenv.config();
 
@@ -17,11 +16,11 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
 // Configuração do CORS
 app.use(cors({
     origin: process.env.CORS_DOMAIN // Permite solicitações apenas do domínio configurado
 }));
-
 
 // Roteadores da API
 app.use('/api/auth', AuthRouter);

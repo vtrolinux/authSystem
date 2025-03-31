@@ -1,5 +1,3 @@
-// src/helpers/mailer.ts
-
 import nodemailer from 'nodemailer';
 import { AppError } from '../utils/AppError.ts';  // Classe de erro personalizada
 
