@@ -15,3 +15,13 @@ const logger = winston.createLogger({
 export function logError(error: any) {
     logger.error(error.message, { stack: error.stack, statusCode: error.statusCode });
 }
+
+// Função para logar erros de forma personalizada
+export function logLimiter(error: any, details: any = {}) {
+    // Log detalhado com informações adicionais
+    logger.error(error.message, {
+        stack: error.stack,
+        statusCode: error.statusCode,
+        ...details,  // Aqui você pode passar qualquer dado adicional, como o ip, path, etc.
+    });
+}
