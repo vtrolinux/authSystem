@@ -1,15 +1,14 @@
 import rateLimit from 'express-rate-limit';
 import { logLimiter } from '../utils/ErrorLog.ts';
+import { AppError } from '../utils/AppError.ts';
 
 const rateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,  // 15 minutos
-    max: 5,                    // Limita a 5 requisições por 15 minutos
+    windowMs: 5 * 60 * 1000,  // 5 minutos
+    max: 10,                    // Limita a 5 requisições por 5 minutos
     message: 'Muitas tentativas. Tente novamente mais tarde.',
     keyGenerator: (req) => req.ip,  // Usando o IP do cliente como chave
     handler: (req, res) => {
-        res.status(429).json({
-            message: 'Você atingiu o limite de requisições. Tente novamente mais tarde.',
-        });
+        return new AppError(429, 'INVALID_REQUEST', 'Você atingiu o limite de requisições. Tente novamente mais tarde.').sendResponse(res);
     },
 });
 
@@ -19,6 +18,9 @@ const loginRateLimiter = rateLimit({
     max: 5,                    // Limita a 5 requisições por 15 minutos
     message: 'Muitas tentativas de login. Tente novamente mais tarde.',
     keyGenerator: (req) => req.ip,  // Usando o IP do cliente
+    handler: (req, res) => {
+        return new AppError(429, 'INVALID_REQUEST', 'Muitas tentativas de login. Tente novamente mais tarde.').sendResponse(res);
+    },
 });
 
 // Limite para registro de novo usuário: até 3 tentativas em 1 hora
@@ -27,6 +29,9 @@ const registerRateLimiter = rateLimit({
     max: 3,                    // Limita a 3 requisições por hora
     message: 'Muitas tentativas de registro. Tente novamente mais tarde.',
     keyGenerator: (req) => req.ip,  // Usando o IP do cliente
+    handler: (req, res) => {
+        return new AppError(429, 'INVALID_REQUEST', 'Muitas tentativas de registro. Tente novamente mais tarde.').sendResponse(res);
+    },
 });
 
 // Limite para confirmação de e-mail: até 2 tentativas em 10 minutos
@@ -45,12 +50,11 @@ const confirmationRateLimiter = rateLimit({
             message: 'Limite de requisições atingido',
         };
 
-        // Usando a função logError para registrar o erro
+        // Usando a função logLimiter para registrar o erro
         logLimiter(new Error('Limite de requisições atingido'), errorDetails);
 
-        res.status(429).json({
-            message: 'Você atingiu o limite de requisições. Tente novamente mais tarde.',
-        });
+        return new AppError(429, 'INVALID_REQUEST', 'Muitas tentativas de confirmação. Tente novamente mais tarde.').sendResponse(res);
+        
     },
 });
 

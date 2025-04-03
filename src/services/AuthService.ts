@@ -99,7 +99,7 @@ class AuthService {
             const objectId = new Types.ObjectId(binaryId);  // Converte para ObjectId
             console.log('Os códigos conferem. Persistindo a verificação no mongoDB.');
             await User.updateOne(
-                { _id: objectId },  // Encontra o usuário pelo ID binário
+                { _id: objectId },  // Encontra o usuário pelo ID
                 { $set: { isEmailVerified: true } }  // Atualiza o campo isEmailVerified
             );           
         }
