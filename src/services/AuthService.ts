@@ -4,7 +4,7 @@ import User from '../models/user.ts';
 import createToken from '../helpers/tokenJWT.ts';  // Supondo que você tenha um helper para criar o token
 import { AppError } from '../utils/AppError.ts';  // Classe de erro personalizada
 import { sendVerificationCode } from '../helpers/mailer.ts'; // Importar função para envio de e-mail
-import { storeVerificationCode, getVerificationCode, deleteVerificationCode } from '../db/redisConnection.ts';
+import { storeVerificationCode, getVerificationCode, deleteVerificationCode } from '../cache/verificationCode.ts';
 import { Types } from 'mongoose';
 
 class AuthService {
@@ -31,11 +31,9 @@ class AuthService {
                     // Gerar um código de verificação aleatório
                     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString(); // Código de 6 dígitos
                     // Armazenar o código no Redis com expiração de 5 minutos
-                    await storeVerificationCode(binaryId, verificationCode);  
-                    
+                    await storeVerificationCode(binaryId, verificationCode);                     
                     // Enviar o código de verificação por e-mail
-                    await sendVerificationCode(user.email,user._id.toString(), verificationCode);
-                    
+                    await sendVerificationCode(user.email,user._id.toString(), verificationCode);                   
                 }
             throw new AppError(422, 'UNCONFIRMED_EMAIL', 'Confirme seu email para fazer login.');
         }
@@ -83,11 +81,6 @@ class AuthService {
             
             // Enviar o código de verificação por e-mail
             await sendVerificationCode(email,savedUser._id.toString(), verificationCode);
-
-            // Converte a string hexadecimal de volta para o ObjectId
-            // const hexString = binaryId.toString('hex');
-            // const originalId = new Object(hexString);
-            // console.log(originalId)
 
           } catch (err) {
             throw new AppError(500, 'USER_CREATION_FAILED', 'Erro ao criar usuário.');
