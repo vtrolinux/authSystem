@@ -47,12 +47,12 @@ const registerValidatorMiddleware = (req: Request, res: Response, next: NextFunc
 };
 
 const emailConfirmationValidatorMiddlware = (req: Request, res: Response, next: NextFunction) => {
-    const { userId, code} = req.param;
+    const { userId, code} = req.query;
     if (!userId){
-        return new AppError(400, 'INVALID_REQUEST', 'Parâmetro ausente.').sendResponse(res);
+        return new AppError(400, 'INVALID_REQUEST', 'Parâmetro userId ausente.').sendResponse(res);
     }
     if (!code) {
-        return new AppError(400, 'INVALID_REQUEST', 'Parâmetro ausente.').sendResponse(res);
+        return new AppError(400, 'INVALID_REQUEST', 'Parâmetro code ausente.').sendResponse(res);
     }
     next();
 }

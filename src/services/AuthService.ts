@@ -16,14 +16,28 @@ class AuthService {
             throw new AppError(422, 'EMAIL_NOT_FOUND', 'Usuário não encontrado com esse e-mail.');
         }
 
-        if (user.isEmailVerified == false) {
-            throw new AppError(422, 'UNCONFIRMED_EMAIL', 'Confirme seu email para fazer login.');
-        }
-
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
             throw new AppError(422, 'INVALID_PASSWORD', 'Senha inválida.');
+        }
+
+        if (user.isEmailVerified == false) {
+
+            const binaryId = Buffer.from(user._id.toString(), 'hex');
+            const storedCode = await getVerificationCode(binaryId);
+                
+                if(storedCode === null){
+                    // Gerar um código de verificação aleatório
+                    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString(); // Código de 6 dígitos
+                    // Armazenar o código no Redis com expiração de 5 minutos
+                    await storeVerificationCode(binaryId, verificationCode);  
+                    
+                    // Enviar o código de verificação por e-mail
+                    await sendVerificationCode(user.email,user._id.toString(), verificationCode);
+                    
+                }
+            throw new AppError(422, 'UNCONFIRMED_EMAIL', 'Confirme seu email para fazer login.');
         }
         
         // Criação do token
