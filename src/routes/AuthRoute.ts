@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import AuthController from '../controllers/AuthController.ts';
-import { loginValidatorMiddleware } from '../middlewares/loginValidatorMiddleware.ts';  // Supondo que você tenha esse middleware de validação
-import { registerValidatorMiddleware } from '../middlewares/registerValidatorMiddleware.ts';  // Supondo que você tenha esse middleware de validação
+import { loginValidatorMiddleware, registerValidatorMiddleware } from '../middlewares/authValidatorMiddleware.ts';
 import { rateLimiter, loginRateLimiter, registerRateLimiter, confirmationRateLimiter } from '../middlewares/rateLimiterMiddleware.ts'; 
 
 const router = Router();
