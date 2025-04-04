@@ -1,5 +1,5 @@
 import {type Request, type Response} from 'express';
-import { sanitizeEmail, sanitizePassword, sanitizeName } from '../sanitization/AuthSanitizer.ts';  // Importando o arquivo de sanitização
+import { sanitizeEmail, sanitizePassword, sanitizeName, sanitizeUserId, sanitizeCode } from '../sanitization/AuthSanitizer.ts';  // Importando o arquivo de sanitização
 import AuthService from '../services/AuthService.ts';
 import { AppError } from '../utils/AppError.ts';
 
@@ -49,7 +49,11 @@ class AuthController {
   async emailConfirmation(req: Request, res: Response): Promise<Response> {
     try {
       // Acessando os parâmetros da URL via req.query
-      const { userId, code } = req.query;
+      let { userId, code } = req.query;
+      // Sanitização dos parâmetros
+      userId = sanitizeUserId(userId as string);  // Sanitiza o userId
+      code = sanitizeCode(code as string);  // Sanitiza o código
+
       console.log('params controller: %s %s', userId, code)
       // Garantir que o userId e o code estão presentes na URL
       if (!userId || !code) {
