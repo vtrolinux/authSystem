@@ -1,5 +1,4 @@
-# authSystem
-Authentication Microservice
+# Authentication Microservice
 Este é um microserviço de autenticação, desenvolvido com Node.js 23, TypeScript (agora nativo do Node.js 23), MongoDB, Redis, Apache Kafka e Docker. O serviço gerencia o processo de autenticação, incluindo registro, login e verificação de e-mail, utilizando Kafka para garantir a comunicação assíncrona entre diferentes microserviços.
 
 Funcionalidades
@@ -29,19 +28,16 @@ Instale as dependências:
 
 Depois de clonar o repositório, instale as dependências do projeto:
 
-`npm install`
+`npm install`  
 Configuração do Docker Compose:
 
 O projeto já inclui um arquivo docker-compose.yml que define os containers do Kafka, Zookeeper, MongoDB e Redis.
 
 Arquivo docker-compose.yml
-O Kafka está configurado para rodar na porta 9093.
-
-O MongoDB está configurado para rodar na porta 27017.
-
-O Redis está configurado para rodar na porta 6379.
-
-O Node.js roda como o microserviço de autenticação.
+O Kafka está configurado para rodar na porta 9093.  
+O MongoDB está configurado para rodar na porta 27017.  
+O Redis está configurado para rodar na porta 6379.  
+O Node.js roda como o microserviço de autenticação.  
 
 Configuração das variáveis de ambiente:
 
@@ -93,7 +89,7 @@ Para rodar o servidor em desenvolvimento (em modo watch), execute:
 
 Este comando vai iniciar o serviço Node.js e permitir que ele rode o código TypeScript diretamente. O Node.js 23 cuidará da transpilação para JavaScript automaticamente durante a execução.
 
-Se tudo for configurado corretamente uma mensagem como será exibida:
+Se tudo for configurado corretamente uma mensagem como esta será exibida:
 
 `💻 :SERVIDOR SENDO EXECUTADO NA PORTA: 3000`  
 `✅ :redis conectado!`  
