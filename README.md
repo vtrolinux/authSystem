@@ -90,13 +90,16 @@ Rodando o Projeto com TypeScript:
 Para rodar o projeto com o Node.js 23, você pode utilizar o comando nativo do Node.js para executar o código TypeScript diretamente sem precisar de uma ferramenta como o tsc.
 
 Para rodar o servidor em desenvolvimento (em modo watch), execute:
+
 `npm run dev`
+
 Este comando vai iniciar o serviço Node.js e permitir que ele rode o código TypeScript diretamente. O Node.js 23 cuidará da transpilação para JavaScript automaticamente durante a execução.
 
 Se tudo for configurado corretamente uma mensagem como será exibida:
-💻 :SERVIDOR SENDO EXECUTADO NA PORTA: 3000
-✅ :redis conectado!
-✅ :mongoose conectado!
+
+`💻 :SERVIDOR SENDO EXECUTADO NA PORTA: 3000`  
+`✅ :redis conectado!`  
+`✅ :mongoose conectado!`  
 
 Verifique o Serviço Rodando:
 
