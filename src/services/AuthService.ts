@@ -6,6 +6,7 @@ import { AppError } from '../utils/AppError.ts';  // Classe de erro personalizad
 import { sendVerificationCode } from '../helpers/mailer.ts'; // Importar função para envio de e-mail
 import { storeVerificationCode, getVerificationCode, deleteVerificationCode } from '../cache/verificationCode.ts';
 import { Types } from 'mongoose';
+import { sendUserVerificationEvent } from '../messaging/producers/authVerificationProducer.ts';  // Importando o produtor Kafka
 
 class AuthService {
     // Função de login
@@ -108,7 +109,9 @@ class AuthService {
             await User.updateOne(
                 { _id: objectId },  // Encontra o usuário pelo ID
                 { $set: { isEmailVerified: true } }  // Atualiza o campo isEmailVerified
-            );           
+            );
+            // Publicar o evento no Kafka para registrar a confirmação do e-mail
+            await sendUserVerificationEvent(userId);  // Chama a função de produtor Kafka           
         }
 
         // Se o código for correto, podemos remover o código do Redis
