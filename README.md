@@ -22,15 +22,14 @@ Clone o repositório:
 
 Primeiro, clone este repositório para a sua máquina local.
 
-bash
-git clone [<url-do-repositorio>](https://github.com/vtrolinux/authSystem)
-cd authSystem
+`git clone https://github.com/vtrolinux/authSystem.git`  
+`cd authSystem`
+
 Instale as dependências:
 
 Depois de clonar o repositório, instale as dependências do projeto:
 
-bash
-npm install
+`npm install`
 Configuração do Docker Compose:
 
 O projeto já inclui um arquivo docker-compose.yml que define os containers do Kafka, Zookeeper, MongoDB e Redis.
@@ -48,8 +47,7 @@ Configuração das variáveis de ambiente:
 
 Antes de rodar o projeto, é necessário configurar as variáveis de ambiente. Crie um arquivo .env na raiz do projeto e adicione as seguintes variáveis:
 
-bash
-EXPRESS_PORT=3000
+```EXPRESS_PORT=3000
 
 MONGO_INITDB_ROOT_USERNAME=
 MONGO_INITDB_ROOT_PASSWORD=
@@ -70,6 +68,7 @@ REDIS_PORT=
 REDIS_PASSWORD=
 
 COMPOSE_BAKE=true
+```
 
 As variáveis podem variar dependendo de sua configuração, especialmente para a conexão com o Kafka, Redis e MongoDB. Certifique-se de que os valores correspondem às configurações do seu ambiente.
 
@@ -77,8 +76,7 @@ Suba os containers usando Docker Compose:
 
 Para subir o ambiente de desenvolvimento, execute o seguinte comando:
 
-bash
-docker-compose up -d
+`docker-compose up -d`  
 Esse comando irá:
 
 Subir os containers do MongoDB, Redis, Zookeeper e Kafka.
